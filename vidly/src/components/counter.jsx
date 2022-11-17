@@ -1,34 +1,57 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class Counter extends Component {
+  componentDidUpdate(prevProps, prevState) {
+    console.log("Previous Props", prevProps);
+    console.log("Previous State", prevState);
+  }
 
-    handleIncrement = () => {
-        let count = this.state.count;
-        this.setState({ value: this.state.value + 1});
-        return count;
-    }
+  componentWillUnmount() {}
 
-    render() { 
-        return (
-            <div>
-                <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
-                <button onClick={this.handleIncrement} className='btn btn-secondary shadow btn-sm m-2'>Increment</button>
-                <button onClick={() => this.props.onDelete(this.props.counter.id)} className="btn btn-danger btn-sm m-2">Delete</button>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <div className="row">
+          <div className="col-1 col-md-1">
+            <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
+          </div>
+          <div className="col-3 col-md-3">
+            <button
+              onClick={() => this.props.onIncrement(this.props.counter)}
+              className="btn btn-secondary shadow-sm btn-sm m-2"
+            >
+              +
+            </button>
+            <button
+              onClick={() => this.props.onDecrement(this.props.counter)}
+              className="btn btn-secondary shadow-sm btn-sm m-2"
+              disabled={this.props.counter.value === 0 ? "disabled" : ""}
+            >
+              -
+            </button>
+            <button
+              onClick={() => this.props.onDelete(this.props.counter.id)}
+              className="btn btn-danger shadow-sm btn-sm m-2"
+            >
+              X
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-    getBadgeClasses () {
-        let classes = "badge mr-2 shadow badge-";
-        classes += this.state.value === 0 ? "warning" : "primary";
+  getBadgeClasses() {
+    let classes = "badge mr-2 shadow badge-";
+    classes += this.props.counter.value === 0 ? "warning" : "primary";
 
-        return(classes);
-    }
+    return classes;
+  }
 
-    formatCount () {
-        return this.state.value.length === 0 ? "Zero" : this.state.value;
-    }
-
+  formatCount() {
+    const { value } = this.props.counter;
+    return value === 0 ? "Zero" : value;
+  }
 }
- 
+
 export default Counter;
